@@ -8,5 +8,3 @@ class Optimizer:
 
     def minimize(self, init=None):
         pass
-
-        
