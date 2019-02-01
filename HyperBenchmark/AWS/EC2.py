@@ -44,10 +44,15 @@ class Instance:
         self.logger.addHandler(ec2Handler)
 
     def terminate(self):
+        if self.instanceid is None:
+            self.logger.error('Instance is not initiated (instanceid missing)')
+            return
         self.ec2.instances.filter(InstanceIds=[self.instanceid]).terminate()
 
     def __del__(self):
         """Destroy the instance"""
+        if self.instanceid is None:
+            return
         self.logger.error(f'Instance is not terminated delete, auto terminating {self.instanceid}')
         self.terminate()
         self.logger.error('instance terminated')
@@ -66,7 +71,6 @@ class Instance:
 
             # close the client connection once the job is done
             client.close()
-            break
-
-        except Exception, e:
-            print e
+            return
+        except Exception as e:
+            print (e)
